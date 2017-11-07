@@ -2,11 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+	MatProgressBarModule,
 	MatDialogModule,
 	MatToolbarModule,
 	MatButtonModule,
+	MatCheckboxModule,
 	MatIconModule,
 	MatSidenavModule,
 	MatListModule,
@@ -84,9 +86,11 @@ const appRoutes: Routes = [
 		appRoutes
 	),
 	BrowserAnimationsModule,
+	MatProgressBarModule,
 	MatDialogModule,
 	MatToolbarModule,
 	MatButtonModule,
+	MatCheckboxModule,
 	MatIconModule,
 	MatSidenavModule,
 	MatListModule,

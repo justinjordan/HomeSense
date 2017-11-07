@@ -1,22 +1,57 @@
 <h1 mat-dialog-title>Add New Device</h1>
 <mat-dialog-content>
-	<mat-vertical-stepper linear>
-		<mat-step label="Locate Device">
-			<form>
+	<mat-vertical-stepper #stepper linear>
+	<!-- <mat-vertical-stepper> -->
+		<mat-step [stepControl]="locateGroup" label="Locate Device">
+			<form [formGroup]="locateGroup" autocomplete="off" (ngSubmit)="locate(locateIp)" *ngIf="!locateRunning; else elseBlock">
 				<mat-form-field>
-					<input matInput placeholder="Local IP Address" required>
+					<input matInput [(ngModel)]="deviceData.ip" formControlName="ipCtrl" placeholder="Device's IP Address">
+					<mat-error *ngIf="locateGroup.controls.ipCtrl.invalid">
+						{{ getValidationError(locateGroup.controls.ipCtrl) }}
+					</mat-error>
 				</mat-form-field>
-				<button mat-raised-button type="button" color="primary">Locate</button>
+				<button mat-raised-button type="submit" color="primary">Locate</button>
 			</form>
+			<ng-template #elseBlock>
+				<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+			</ng-template>
 		</mat-step>
 		<mat-step label="SSH Credentials">
-
+			<form>
+				<mat-form-field>
+					<input matInput type="text" placeholder="Username" value="pi">
+				</mat-form-field>
+				<mat-form-field>
+					<input matInput type="password" placeholder="Password" value="raspberry">
+				</mat-form-field>
+				<div>
+					<button mat-raised-button type="button" color="primary">Connect</button>
+				</div>
+			</form>
 		</mat-step>
 		<mat-step label="Configure">
-
+			<form>
+				<fieldset>
+					<mat-form-field>
+						<input matInput type="text" placeholder="Device Name">
+						<mat-hint>e.g. "Living Room" or "Garage"</mat-hint>
+					</mat-form-field>
+				</fieldset>
+				<fieldset>
+					<mat-checkbox>Run server on boot (recommended)</mat-checkbox>
+				</fieldset>
+				<fieldset>
+					<button mat-raised-button type="button" color="primary">Save</button>
+				</fieldset>
+			</form>
 		</mat-step>
 		<mat-step label="Installation">
-
+			<p>
+				Your sensor node will now begin the installation process. Ensure it has internet, then continue!
+			</p>
+			<div>
+				<button mat-raised-button type="button" color="primary">Begin Installation</button>
+			</div>
 		</mat-step>
 	</mat-vertical-stepper>
 </mat-dialog-content>
