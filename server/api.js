@@ -9,7 +9,7 @@ class Api extends ApiRouting
 			resolve('This is api.main()');
 		});
 	}
-	
+
 	devices()
 	{
 		return new Promise((resolve, reject) => {

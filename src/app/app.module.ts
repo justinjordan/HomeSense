@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {
 	MatProgressBarModule,
 	MatDialogModule,
@@ -17,6 +18,7 @@ import {
 	MatTooltipModule,
 	MatStepperModule,
 	MatInputModule,
+	MatProgressSpinnerModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -25,6 +27,8 @@ import { DeviceDetailsComponent } from './device-details/device-details.componen
 import { SettingsComponent } from './settings/settings.component';
 import { ScenariosComponent } from './scenarios/scenarios.component';
 import { NewDeviceComponent } from './new-device/new-device.component';
+
+import { DevicesService } from './devices.service';
 
 const appRoutes: Routes = [
 	{
@@ -86,6 +90,7 @@ const appRoutes: Routes = [
 		appRoutes
 	),
 	BrowserAnimationsModule,
+	HttpClientModule,
 	MatProgressBarModule,
 	MatDialogModule,
 	MatToolbarModule,
@@ -99,8 +104,9 @@ const appRoutes: Routes = [
 	MatTooltipModule,
 	MatStepperModule,
 	MatInputModule,
+	MatProgressSpinnerModule,
   ],
-  providers: [],
+  providers: [HttpClient, DevicesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

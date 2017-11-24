@@ -1,11 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {
+	MatDialog,
+	MatDialogRef,
+	MAT_DIALOG_DATA,
+	MatProgressSpinner,
+} from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NewDeviceComponent } from '../new-device/new-device.component';
+import { DevicesService } from '../devices.service';
 
 class Device
 {
-	constructor(public id: number, public label: string, public mac: string)
+	constructor(public label: string, public mac: string)
 	{
 
 	}
@@ -18,17 +24,31 @@ class Device
 })
 export class DevicesComponent implements OnInit {
 
+	loading: Boolean = true;
 	devices: Array<Device>;
 
-	constructor(public dialog: MatDialog)
+	constructor(public dialog: MatDialog, private devicesService: DevicesService)
 	{
 		this.devices = [];
 	}
 
 	ngOnInit() {
-		this.devices.push(new Device(1, 'Entryway', '00:C0:CA:75:0B:38'));
-		this.devices.push(new Device(2, 'Bedroom', '00:C0:CA:75:0B:38'));
-		this.devices.push(new Device(3, 'Bathroom...?', '00:C0:CA:75:0B:38'));
+		this.loadDevices();
+	}
+
+	loadDevices()
+	{
+		this.devicesService.loadDevices().subscribe((data: {result, error}) => {
+			for (var i in data.result)
+			{
+				let d = data.result[i];
+				this.devices.push(new Device(d.label, d.mac));
+			}
+
+			this.loading = false;
+		}, (err) => {
+			console.error(err);
+		});
 	}
 
 	newDeviceDialog(): void
@@ -37,15 +57,6 @@ export class DevicesComponent implements OnInit {
 			width: '600px',
 			data: {}
 		});
-		// let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-		// 	width: '250px',
-		// 	data: { name: this.name, animal: this.animal }
-		// });
-		//
-		// dialogRef.afterClosed().subscribe(result => {
-		// 	console.log('The dialog was closed');
-		// 	this.animal = result;
-		// });
 	}
 
 }

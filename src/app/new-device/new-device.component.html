@@ -3,12 +3,15 @@
 	<mat-vertical-stepper #stepper linear>
 	<!-- <mat-vertical-stepper> -->
 		<mat-step [stepControl]="locateGroup" label="Locate Device">
-			<form [formGroup]="locateGroup" autocomplete="off" (ngSubmit)="locate(locateIp)" *ngIf="!locateRunning; else elseBlock">
+			<form [formGroup]="locateGroup" autocomplete="off" (ngSubmit)="locate()" *ngIf="!locateRunning; else elseBlock">
 				<mat-form-field>
-					<input matInput [(ngModel)]="deviceData.ip" formControlName="ipCtrl" placeholder="Device's IP Address">
+					<input matInput [(ngModel)]="deviceData.ip" formControlName="ipCtrl" placeholder="Device's IP Address" #ipField>
 					<mat-error *ngIf="locateGroup.controls.ipCtrl.invalid">
 						{{ getValidationError(locateGroup.controls.ipCtrl) }}
 					</mat-error>
+				</mat-form-field>
+				<mat-form-field>
+					<input matInput [(ngModel)]="deviceData.ssh_port" formControlName="sshPortCtrl" placeholder="SSH Port">
 				</mat-form-field>
 				<button mat-raised-button type="submit" color="primary">Locate</button>
 			</form>
@@ -16,18 +19,21 @@
 				<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 			</ng-template>
 		</mat-step>
-		<mat-step label="SSH Credentials">
-			<form>
+		<mat-step [stepControl]="sshGroup" label="SSH Credentials">
+			<form [formGroup]="sshGroup" (ngSubmit)="test_ssh()" *ngIf="!sshRunning; else elseBlock">
 				<mat-form-field>
-					<input matInput type="text" placeholder="Username" value="pi">
+					<input matInput [(ngModel)]="deviceData.user" formControlName="sshUserCtrl" type="text" placeholder="Username">
 				</mat-form-field>
 				<mat-form-field>
-					<input matInput type="password" placeholder="Password" value="raspberry">
+					<input matInput [(ngModel)]="deviceData.pass" formControlName="sshPassCtrl" type="password" placeholder="Password">
 				</mat-form-field>
 				<div>
-					<button mat-raised-button type="button" color="primary">Connect</button>
+					<button mat-raised-button type="submit" color="primary">Connect</button>
 				</div>
 			</form>
+			<ng-template #elseBlock>
+				<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+			</ng-template>
 		</mat-step>
 		<mat-step label="Configure">
 			<form>
@@ -41,7 +47,7 @@
 					<mat-checkbox>Run server on boot (recommended)</mat-checkbox>
 				</fieldset>
 				<fieldset>
-					<button mat-raised-button type="button" color="primary">Save</button>
+					<button mat-raised-button type="button" color="primary">Install</button>
 				</fieldset>
 			</form>
 		</mat-step>
